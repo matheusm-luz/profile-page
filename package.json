@@ -5,7 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "build-git": "ng build --output-path docs --base-href /profile-page/",
+    "build-git": "ng build --output-path docs --base-href /profile-page/ && mv docs/browser/* docs/ && rm -rf docs/browser",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
