@@ -1,27 +1,352 @@
-<div class="container">
-  <header>
-    <nav>
-      <ul>
-        <li><a href="#">Home</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Projects</a></li>
-        <li><a href="#">Contact</a></li>
-      </ul>
-    </nav>
-  </header>
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 
-  <section class="main-content">
-    <h1>Welcome to My GitHub Repository</h1>
-    <p>This is a minimalistic page showcasing my projects and repositories. Feel free to explore!</p>
-    <button class="cta-button" (click)="viewWork()">View My Work</button>
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a href="#topo" class="logo mono"><span class="accent">~/</span>matheus</a>
+    <nav class="nav" aria-label="Seções">
+      @for (item of nav; track item.id; let i = $index) {
+        <a class="nav__link mono" [href]="'#' + item.id"><span class="accent">0{{ i + 1 }}.</span> {{ item.label }}</a>
+      }
+    </nav>
+  </div>
+</header>
+
+<main id="conteudo">
+  <!-- Hero -->
+  <section id="topo" class="hero">
+    <div class="container hero__grid">
+      <div class="hero__intro">
+        @if (profile.openToWork) {
+          <span class="status-pill mono">
+            <span class="status-pill__dot" aria-hidden="true"></span>Disponível para novas oportunidades
+          </span>
+        }
+
+        <div class="hero__heading">
+          <span class="prompt mono" aria-hidden="true"><span class="accent">$</span> whoami</span>
+          <h1 class="hero__name">{{ profile.name }}</h1>
+          <p class="hero__role">
+            {{ profile.role }}<span class="faint"> · </span><span class="accent">{{ profile.specialty }}</span>
+          </p>
+        </div>
+
+        <p class="hero__pitch">{{ profile.pitch }}</p>
+
+        <div class="hero__actions">
+          <a href="#projetos" class="btn btn--primary btn--lg">
+            Ver projetos
+            <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14"></path><path d="M6 13l6 6 6-6"></path></svg>
+          </a>
+          <a href="#contato" class="btn btn--ghost btn--lg">
+            <ng-container *ngTemplateOutlet="iconMail"></ng-container>
+            Entrar em contato
+          </a>
+        </div>
+
+        <div class="hero__links">
+          <a class="text-link mono" [href]="profile.github" target="_blank" rel="noopener">
+            GitHub<ng-container *ngTemplateOutlet="iconExternal"></ng-container>
+          </a>
+          <a class="text-link mono" [href]="profile.linkedin" target="_blank" rel="noopener">
+            LinkedIn<ng-container *ngTemplateOutlet="iconExternal"></ng-container>
+          </a>
+          <a class="text-link mono" [href]="'mailto:' + profile.email">
+            E-mail<ng-container *ngTemplateOutlet="iconExternal"></ng-container>
+          </a>
+        </div>
+      </div>
+
+      <div class="code-card">
+        <div class="code-card__bar mono">
+          <span>perfil.json</span>
+          <span>pt-BR · utf-8</span>
+        </div>
+        <div class="code-card__body mono">
+          <div class="code-line"><span class="ln">1</span><span class="punct">&#123;</span></div>
+          @for (line of profileLines; track line.key; let i = $index, last = $last) {
+            <div class="code-line">
+              <span class="ln">{{ i + 2 }}</span>
+              <span class="key">"{{ line.key }}"</span><span class="punct">: </span>
+              @if (line.values) {
+                <span class="punct">[</span>
+                @for (value of line.values; track value; let lastValue = $last) {
+                  <span class="str">"{{ value }}"</span>
+                  @if (!lastValue) {
+                    <span class="punct">, </span>
+                  }
+                }
+                <span class="punct">]</span>
+              } @else {
+                <span class="str">"{{ line.value }}"</span>
+              }
+              @if (!last) {
+                <span class="punct">,</span>
+              }
+            </div>
+          }
+          <div class="code-line"><span class="ln">{{ profileLines.length + 2 }}</span><span class="punct">&#125;</span></div>
+        </div>
+      </div>
+    </div>
   </section>
 
-  <footer>
-    <ul class="social-links">
-      <li><a href="#">Twitter</a></li>
-      <li><a href="#">GitHub</a></li>
-      <li><a href="#">LinkedIn</a></li>
-    </ul>
-    <p>© 2024 My Portfolio</p>
-  </footer>
-</div>
+  <!-- 01. Sobre -->
+  <section id="sobre" class="section">
+    <div class="container">
+      <div class="section-heading">
+        <span class="section-heading__num mono">01.</span>
+        <h2>Sobre mim</h2>
+        <span class="section-heading__rule" aria-hidden="true"></span>
+      </div>
+
+      <div class="about__grid">
+        <div class="about__text">
+          @for (paragraph of about; track $index; let first = $first) {
+            <p [class.about__lead]="first">{{ paragraph }}</p>
+          }
+
+          <ul class="stats" role="list">
+            @for (stat of stats; track stat.label) {
+              <li class="stat">
+                <span class="stat__value">{{ stat.value }}</span>
+                <span class="stat__label">{{ stat.label }}</span>
+              </li>
+            }
+          </ul>
+        </div>
+
+        <div class="card stack">
+          <span class="card__label mono"><span class="accent">&gt;</span> stack --principal</span>
+          @for (group of stack; track group.title) {
+            <div class="stack__group">
+              <h3 class="stack__title" [class.stack__title--secondary]="group.secondary">{{ group.title }}</h3>
+              <ul class="chips" role="list">
+                @for (item of group.items; track item) {
+                  <li class="chip" [class.chip--outline]="group.secondary">{{ item }}</li>
+                }
+              </ul>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02. Experiência -->
+  <section id="experiencia" class="section">
+    <div class="container">
+      <div class="section-heading section-heading--compact">
+        <span class="section-heading__num mono">02.</span>
+        <h2>Experiência</h2>
+        <span class="section-heading__rule" aria-hidden="true"></span>
+      </div>
+
+      <ol class="timeline" role="list">
+        @for (job of experiences; track job.company) {
+          <li class="job">
+            <div class="job__meta">
+              <span class="job__period mono">{{ job.period }}</span>
+              <span class="job__duration">{{ job.duration }}</span>
+              @if (job.promoted) {
+                <span class="badge mono">promovido</span>
+              }
+            </div>
+            <div class="job__body">
+              <h3 class="job__role">{{ job.role }} <span class="accent">&#64; {{ job.company }}</span></h3>
+              <p class="job__summary">{{ job.summary }}</p>
+              <ul class="bullets" role="list">
+                @for (highlight of job.highlights; track highlight) {
+                  <li>{{ highlight }}</li>
+                }
+              </ul>
+              <ul class="chips" role="list" aria-label="Tecnologias">
+                @for (tech of job.tech; track tech) {
+                  <li class="chip chip--sm">{{ tech }}</li>
+                }
+              </ul>
+            </div>
+          </li>
+        }
+      </ol>
+
+      <a class="text-link text-link--accent mono" [href]="profile.linkedin" target="_blank" rel="noopener">
+        Ver perfil completo no LinkedIn<ng-container *ngTemplateOutlet="iconExternal"></ng-container>
+      </a>
+    </div>
+  </section>
+
+  <!-- 03. Projetos -->
+  <section id="projetos" class="section">
+    <div class="container">
+      <div class="section-heading section-heading--tight">
+        <span class="section-heading__num mono">03.</span>
+        <h2>Projetos em destaque</h2>
+        <span class="section-heading__rule" aria-hidden="true"></span>
+      </div>
+      <p class="section-intro">
+        Dois projetos pessoais em construção. Aqui você acompanha o plano e o progresso de cada um, do problema ao deploy.
+      </p>
+
+      <div class="projects">
+        @for (project of projects; track project.name) {
+          <article class="project">
+            <div class="project__blueprint">
+              <div class="arch" role="img" [attr.aria-label]="'Esboço da arquitetura: ' + project.architecture.join(' → ')">
+                @for (node of project.architecture; track node; let lastNode = $last) {
+                  <span class="arch__node mono">{{ node }}</span>
+                  @if (!lastNode) {
+                    <svg class="arch__arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="M13 6l6 6-6 6"></path></svg>
+                  }
+                }
+              </div>
+              <span class="arch__caption mono">esboço da arquitetura · sujeito a mudanças</span>
+            </div>
+
+            <div class="project__body">
+              <div class="project__top">
+                <span class="project__category mono">Projeto {{ project.number }} · {{ project.category }}</span>
+                <span class="wip mono"><span class="wip__dot" aria-hidden="true"></span>em construção</span>
+              </div>
+              <h3 class="project__name">{{ project.name }}</h3>
+              <p class="project__desc">{{ project.description }}</p>
+
+              <div class="roadmap">
+                <div class="roadmap__head mono">
+                  <span><span class="accent">&gt;</span> roadmap</span>
+                  <span>{{ project.doneCount }} de {{ project.roadmap.length }} etapas</span>
+                </div>
+                <div
+                  class="progress"
+                  role="progressbar"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                  [attr.aria-valuenow]="project.progress"
+                  [attr.aria-label]="'Progresso de ' + project.name"
+                >
+                  <div class="progress__fill" [style.width.%]="project.progress"></div>
+                </div>
+                <ul class="roadmap__list" role="list">
+                  @for (step of project.roadmap; track step.label) {
+                    <li class="roadmap__step" [class.roadmap__step--done]="step.done">
+                      <span class="check" aria-hidden="true">
+                        @if (step.done) {
+                          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"></path></svg>
+                        }
+                      </span>
+                      <span>
+                        {{ step.label }}
+                        @if (step.done) {
+                          <span class="visually-hidden">(concluída)</span>
+                        }
+                      </span>
+                    </li>
+                  }
+                </ul>
+              </div>
+
+              <ul class="chips" role="list" aria-label="Stack planejada">
+                @for (tech of project.stack; track tech) {
+                  <li class="chip chip--sm chip--dashed">{{ tech }}</li>
+                }
+              </ul>
+
+              <div class="project__footer">
+                <a class="btn btn--ghost" [href]="project.repoUrl" target="_blank" rel="noopener">
+                  Acompanhar no GitHub<ng-container *ngTemplateOutlet="iconExternal"></ng-container>
+                </a>
+                @if (project.eta) {
+                  <span class="project__eta mono">previsão: {{ project.eta }}</span>
+                }
+              </div>
+            </div>
+          </article>
+        }
+
+        <a class="more-card" [href]="profile.github" target="_blank" rel="noopener">
+          <span class="more-card__text">
+            <span class="more-card__title">Outros repositórios e experimentos</span>
+            <span class="more-card__handle mono">{{ githubHandle }}</span>
+          </span>
+          <svg class="icon accent" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7"></path><path d="M8 7h9v9"></path></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04. Formação -->
+  <section id="formacao" class="section">
+    <div class="container">
+      <div class="section-heading">
+        <span class="section-heading__num mono">04.</span>
+        <h2>Formação</h2>
+        <span class="section-heading__rule" aria-hidden="true"></span>
+      </div>
+
+      <div class="edu-grid">
+        @for (item of education; track item.course) {
+          <article class="card edu">
+            <div class="edu__top mono">
+              <span class="accent">{{ item.level }}</span>
+              <span class="muted">{{ item.period }}</span>
+            </div>
+            <h3 class="edu__course">{{ item.course }}</h3>
+            <p class="edu__inst">{{ item.institution }}</p>
+            <ul class="chips" role="list" aria-label="Disciplinas de destaque">
+              @for (subject of item.highlights; track subject) {
+                <li class="chip chip--sm">{{ subject }}</li>
+              }
+            </ul>
+          </article>
+        }
+      </div>
+
+      <div class="certs">
+        <h3 class="certs__title mono"><span class="accent">&gt;</span> certificações</h3>
+        <ul class="certs__list" role="list">
+          @for (cert of certifications; track cert.name) {
+            <li class="cert">
+              <span class="cert__name">{{ cert.name }}</span>
+              <span class="cert__meta mono">{{ cert.issuer }} · {{ cert.year }}</span>
+            </li>
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05. Contato -->
+  <section id="contato" class="section contact">
+    <div class="contact__inner">
+      <span class="contact__label mono">05. contato</span>
+      <h2 class="contact__title">Vamos conversar?</h2>
+      <p class="contact__text">{{ profile.contactMessage }}</p>
+      <div class="contact__actions">
+        <a class="btn btn--primary btn--xl" [href]="'mailto:' + profile.email">
+          <ng-container *ngTemplateOutlet="iconMail"></ng-container>
+          <span class="btn__label">{{ profile.email }}</span>
+        </a>
+        <a class="btn btn--ghost btn--xl" [href]="profile.linkedin" target="_blank" rel="noopener">
+          LinkedIn<ng-container *ngTemplateOutlet="iconExternal"></ng-container>
+        </a>
+        <a class="btn btn--ghost btn--xl" [href]="profile.github" target="_blank" rel="noopener">
+          GitHub<ng-container *ngTemplateOutlet="iconExternal"></ng-container>
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container site-footer__inner mono">
+    <span>© {{ year }} {{ profile.name }}</span>
+    <span>Feito com Angular · hospedado no GitHub Pages</span>
+  </div>
+</footer>
+
+<ng-template #iconExternal>
+  <svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7"></path><path d="M8 7h9v9"></path></svg>
+</ng-template>
+
+<ng-template #iconMail>
+  <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 7l9 6 9-6"></path></svg>
+</ng-template>
